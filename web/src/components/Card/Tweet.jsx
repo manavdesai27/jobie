@@ -3,7 +3,7 @@ import React, {useState,useEffect} from "react";
 import {Card,CardActions,CardContent,Typography,Button} from "@mui/material"
 
 const URLReplacer = (str)=>{
-    let match = str.match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.\;]*[-A-Z0-9+&@#/%=~_\|])/ig);
+    let match = str.match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.\\;]*[-A-Z0-9+&@#/%=~_\\|])/ig);
     return match;
 }
 
