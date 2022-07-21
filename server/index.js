@@ -3,17 +3,25 @@ const bodyParser = require("body-parser");
 const request = require("request");
 const http = require("http");
 const dotenv = require("dotenv");
+const { MongoClient, ServerApiVersion, Db } = require("mongodb");
 
 dotenv.config();
+
 const app = express();
 let port = process.env.PORT || 8000;
+const uri = process.env.ATLAS_URI;
+const BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const server = http.createServer(app);
 
-const BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN;
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverApi: ServerApiVersion.v1,
+});
 
 let timeout = 0;
 
@@ -45,7 +53,26 @@ const streamTweets = () => {
             reconnect(stream);
           } else {
             if (json.data) {
-              console.log(json);
+              client.connect(async (err) => {
+                if (err) {
+                  console.log(err);
+                  throw err;
+                }
+                if (json.includes.users.length === 1) {
+                  const db = client.db("Jobie");
+                  const col = db.collection("tweets");
+                  const dataFormatted = json.data.text;
+                  const dateCreated = json.data.created_at;
+                  const toAdd = {
+                    text: dataFormatted,
+                    date: dateCreated,
+                    mail: false,
+                  };
+                  await col.insertOne(toAdd);
+                  console.log("tweet added");
+                  client.close();
+                }
+              });
             } else {
               console.log(json);
             }
@@ -64,10 +91,10 @@ const streamTweets = () => {
 };
 
 async function reconnect(stream) {
-    timeout++;
-    stream.abort();
-    await sleep(2 ** timeout * 1000);
-    streamTweets();
+  timeout++;
+  stream.abort();
+  await sleep(2 ** timeout * 1000);
+  streamTweets();
 }
 
 server.listen(port, () => {
