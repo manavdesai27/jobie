@@ -12,13 +12,15 @@ const Tweet = ({tweetData})=>{
     // const FormatText = (str)=> (str.replace(new RegExp('\r?\n','g'), '<br />'));
     const [text, setText] = useState("");
     const [link,setLink] = useState("");
-    const [tweetLink,setTweetLink] = useState("#");
+    const [tweetLink,setTweetLink] = useState(`#`);
     
     useEffect(() => {
-        let tempText = tweetData.data.text;
+        console.log(tweetData.creatorUsername);
+        let tempText = tweetData.text;
         setLink(URLReplacer(tempText));
         setText(tempText.replace(URLReplacer(tempText),""));
-        setTweetLink(`https://twitter/${tweetData.includes.users[0].username}/status/${tweetData.data.id}`);
+        setTweetLink(`https://twitter.com/${tweetData.creatorUsername}/status/${tweetData.tweetId}`);
+
     }, [tweetData]);
     
 

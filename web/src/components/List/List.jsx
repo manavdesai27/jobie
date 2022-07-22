@@ -6,6 +6,7 @@ import Card from '../Card/Tweet';
 
 
 const List = ({Tweets})=>{
+    
     return(
         <>
             <Grid container rowSpacing={2} columnSpacing={2}>

@@ -1,10 +1,10 @@
 const express = require("express");
+const cors = require("cors")
 const bodyParser = require("body-parser");
 const request = require("request");
 const http = require("http");
 const dotenv = require("dotenv");
 const { MongoClient, ServerApiVersion, Db } = require("mongodb");
-
 dotenv.config();
 
 const app = express();
@@ -12,16 +12,13 @@ let port = process.env.PORT || 8000;
 const uri = process.env.ATLAS_URI;
 const BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN;
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors())
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
 
 const server = http.createServer(app);
 
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverApi: ServerApiVersion.v1,
-});
+const client = new MongoClient(uri);
 
 let timeout = 0;
 
@@ -62,13 +59,20 @@ const streamTweets = () => {
                 if (json.includes.users.length === 1) {
                   const db = client.db("Jobie");
                   const col = db.collection("tweets");
+
                   const dataFormatted = json.data.text;
                   const dateCreated = json.data.created_at;
+                  const tweetID = json.data.id;
+                  const tweetedBy = json.includes.users[0].username;
+
                   const toAdd = {
                     text: dataFormatted,
+                    creatorUsername: tweetedBy,
+                    tweetId: tweetID,
                     date: dateCreated,
                     mail: false,
                   };
+
                   await col.insertOne(toAdd);
                   console.log("tweet added");
                   client.close();
@@ -98,8 +102,27 @@ async function reconnect(stream) {
   streamTweets();
 }
 
+async function main(){
+  const res = await client.connect();
+  //return res;
+}
+
+app.get('/', async function(req, res){  
+  const db = client.db("Jobie");
+  const col = db.collection("tweets");
+
+  const arrayOfEntries = await col.find({}).toArray();
+  let response = {
+       body: arrayOfEntries
+  }
+  res.send(response);
+})
+
 server.listen(port, () => {
   console.log("Listening in port " + port);
+  main()
+.then(res => console.log(res))
+.catch(console.error)
   try {
     streamTweets();
   } catch (e) {
