@@ -120,5 +120,3 @@ const ret = [
 export const dataCall = () =>{
     return ret;
 }
-
- 

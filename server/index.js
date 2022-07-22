@@ -58,6 +58,7 @@ const streamTweets = () => {
                   console.log(err);
                   throw err;
                 }
+
                 if (json.includes.users.length === 1) {
                   const db = client.db("Jobie");
                   const col = db.collection("tweets");
