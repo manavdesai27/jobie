@@ -1,24 +1,15 @@
 import React from "react";
-
-import { Grid } from "@mui/material";
-
 import Card from '../Card/Tweet';
 
 
 const List = ({Tweets})=>{
     
     return(
-        <>
-            <Grid container rowSpacing={2} columnSpacing={2}>
+        <div className="flex flex-row justify-center md:grid md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-4 flex-wrap py-4 mx-10">
             {Tweets?.map((tweetJSON,i) => {
-                return (<>
-                    <Grid key={i} item xs={12} sm={12} md={6} xl={4}>
-                        <Card tweetData={tweetJSON}></Card>
-                    </Grid>
-                </>)
-                } )}
-            </Grid>
-        </>
+                return (<Card tweetData={tweetJSON}></Card>)
+                })}
+        </div>
     );
 }
 

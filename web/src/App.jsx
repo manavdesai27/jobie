@@ -2,14 +2,11 @@ import React,{useState} from "react";
 import Header from './components/Header/Header';
 import List from './components/List/List';
 
-//import {dataCall} from './api/index';
 import { useEffect } from "react";
 
 function App() {
   const [Tweets, setTweets] = useState([]);
   useEffect(() => {
-    // const data = dataCall();
-    // setTweets(data);
     async function fetchData(){
       let response;
       await fetch(process.env.REACT_APP_BACKENDURL, {

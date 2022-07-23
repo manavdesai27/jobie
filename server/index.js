@@ -1,10 +1,9 @@
 const express = require("express");
 const cors = require("cors")
-const bodyParser = require("body-parser");
 const request = require("request");
 const http = require("http");
 const dotenv = require("dotenv");
-const { MongoClient, ServerApiVersion, Db } = require("mongodb");
+const { MongoClient } = require("mongodb");
 dotenv.config();
 
 const app = express();
@@ -104,7 +103,7 @@ async function reconnect(stream) {
 
 async function main(){
   const res = await client.connect();
-  //return res;
+  return res;
 }
 
 app.get('/', async function(req, res){  
@@ -121,7 +120,7 @@ app.get('/', async function(req, res){
 server.listen(port, () => {
   console.log("Listening in port " + port);
   main()
-.then(res => console.log(res))
+.then(res => console.log("Connected to MongoDB"))
 .catch(console.error)
   try {
     streamTweets();

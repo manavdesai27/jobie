@@ -1,32 +1,14 @@
 import React from "react";
 
-import {AppBar,Typography,Toolbar,Container} from "@mui/material"
-
 const Header = () =>{
     return (
-    <AppBar position="static">
-        <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            Jobie
-          </Typography>
-        </Toolbar>
-        </Container>
-    </AppBar>
+      <nav className="relative w-full flex flex-wrap items-center justify-between py-3 bg-blue-700 text-white shadow-lg">
+      <div className="w-full flex flex-wrap items-center justify-between px-10">
+        <div className="">
+          <a className="text-2xl text-white font-semibold" href="https://jobie.netlify.app">JobIE</a>
+        </div>
+      </div>
+    </nav>
     );
 }
 
