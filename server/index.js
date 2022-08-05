@@ -3,12 +3,13 @@ const cors = require("cors")
 const request = require("request");
 const http = require("http");
 const dotenv = require("dotenv");
-const { MongoClient } = require("mongodb");
+const mongoose = require('mongoose')
+const Tweet = require('./models/schema')
+
 dotenv.config();
 
 const app = express();
 let port = process.env.PORT || 8000;
-const uri = process.env.ATLAS_URI;
 const BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN;
 
 app.use(cors())
@@ -17,7 +18,6 @@ app.use(express.json())
 
 const server = http.createServer(app);
 
-const client = new MongoClient(uri);
 
 let timeout = 0;
 
@@ -49,16 +49,7 @@ const streamTweets = () => {
             reconnect(stream);
           } else {
             if (json.data) {
-              client.connect(async (err) => {
-                if (err) {
-                  console.log(err);
-                  throw err;
-                }
-
                 if (json.includes.users.length === 1) {
-                  const db = client.db("Jobie");
-                  const col = db.collection("tweets");
-
                   const dataFormatted = json.data.text;
                   const dateCreated = json.data.created_at;
                   const tweetID = json.data.id;
@@ -71,12 +62,13 @@ const streamTweets = () => {
                     date: dateCreated,
                     mail: false,
                   };
-
-                  await col.insertOne(toAdd);
-                  console.log("tweet added");
-                  client.close();
+                  const newTweet = new Tweet(toAdd);
+                  newTweet.save().then((res)=> {
+                    console.log(res);
+                  }).catch((err)=>{ 
+                    console.log(err)
+                  })
                 }
-              });
             } else {
               console.log(json);
             }
@@ -101,27 +93,21 @@ async function reconnect(stream) {
   streamTweets();
 }
 
-async function main(){
-  const res = await client.connect();
-  return res;
-}
-
 app.get('/', async function(req, res){  
-  const db = client.db("Jobie");
-  const col = db.collection("tweets");
-
-  const arrayOfEntries = await col.find({}).toArray();
+  const arrayOfEntries = await Tweet.find({});
   let response = {
        body: arrayOfEntries
   }
   res.send(response);
 })
 
-server.listen(port, () => {
+server.listen(port, async () => {
   console.log("Listening in port " + port);
-  main()
-.then(res => console.log("Connected to MongoDB"))
-.catch(console.error)
+  await mongoose.connect(process.env.ATLAS_URI).then((res) => {
+    console.log("Connected to MongoDB");
+  }).catch((err) => {
+    console.log(err)
+  });
   try {
     streamTweets();
   } catch (e) {
