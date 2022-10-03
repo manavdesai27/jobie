@@ -65,7 +65,7 @@ const SubscribeModal = ({ open, close, resp, setResp }) => {
         className={`absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50
         }`}
       >
-        <div className="p-6 w-1/3 bg-white divide-y divide-gray-500">
+        <div className="p-6 w-1/3 bg-white">
           <div className="flex items-center justify-between">
             <h3 className="text-2xl text-center w-full">
               SUBSCRIBE FOR UPDATES!
@@ -88,7 +88,7 @@ const SubscribeModal = ({ open, close, resp, setResp }) => {
           </div>
           <div className="mt-4">
             <input
-              className="border py-2 px-3 text-grey-darkest mb-4 w-full"
+              className="border py-2 px-3 text-gray-700 mb-4 w-full outline-gray-300"
               type="text"
               name="name"
               value={name}
@@ -96,7 +96,7 @@ const SubscribeModal = ({ open, close, resp, setResp }) => {
               placeholder="Name"
             />
             <input
-              className="border py-2 px-3 text-grey-darkest mb-4 w-full"
+              className="border py-2 px-3 text-grey-darkest mb-4 w-full outline-gray-300"
               type="text"
               name="email"
               value={email}
