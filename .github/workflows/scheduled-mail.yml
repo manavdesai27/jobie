@@ -1,0 +1,20 @@
+name: Trigger email notification on a CRON Schedule
+
+on:
+  schedule:
+    -cron: "0 * * * *"
+jobs:
+  notifications:
+    if: github.repository == 'akshatnema/jobie'
+    env:
+      EMAIL_ID: ${{ secrets.EMAIL_ID }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+    name: Trigger email notification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Trigger email notification
+        run: node run src/mail.js

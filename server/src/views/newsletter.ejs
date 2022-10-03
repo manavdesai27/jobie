@@ -1,0 +1,17 @@
+<table>
+    <tr>
+        <td>
+            <h1>New opportunities</h1>
+        </td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <td>
+            <%items.forEach(item => {%>
+                <%- include('box.ejs', {item}); %>
+            <%});%>
+        </td>
+    </tr>
+</table>
