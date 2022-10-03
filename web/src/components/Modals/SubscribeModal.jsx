@@ -5,7 +5,6 @@ const SubscribeModal = ({ open, close, resp, setResp }) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [pClass, setPClass] = useState("");
-  // const [resp, setResp] = useState("");
 
   const testEmail = (email) => {
     const re = /\S+@\S+\.\S+/;
@@ -105,15 +104,9 @@ const SubscribeModal = ({ open, close, resp, setResp }) => {
               placeholder="Email Address"
             />
             <div className="flex items-center justify-evenly">
-              {/* <button
-                onClick={close}
-                className="px-4 py-2 text-white bg-red-600 rounded"
-              >
-                Cancel
-              </button> */}
               <button
                 onClick={(e) => handleSubmit(e)}
-                className="px-4 py-2 w-full text-white bg-green-600 rounded"
+                className="px-4 py-2 w-full text-white bg-blue-600 rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
               >
                 Subscribe
               </button>

@@ -6,7 +6,6 @@ const Header = () => {
   const [resp, setResp] = useState("");
 
   const closeModal = () => {
-    console.log("clicked");
     setResp("");
     close(false);
   };
@@ -17,7 +16,6 @@ const Header = () => {
 
   const openModal = (e) => {
     e.preventDefault();
-    console.log("Opened");
     close(true);
   }
 
@@ -34,13 +32,13 @@ const Header = () => {
             </a>
           </div>
           <div className="">
-            <a
+            <button
               className="inline-block border border-white rounded hover:border-gray-200 text-white hover:bg-gray-200 py-1 px-3 hover:text-blue-700"
               href="/"
               onClick={(e) => openModal(e)}
             >
               Subscribe
-            </a>
+            </button>
           </div>
         </div>
       </nav>

@@ -107,10 +107,8 @@ app.get("/", async function (req, res) {
 app.post("/mail", async function (req, res) {
   const { name, email } = req.body;
   const userAdded = await User.findOne({ email: email });
-  console.log("UserAdded", userAdded)
   if (userAdded) {
     //check existing user
-    console.log("Error");
     res.status(400).send({ message: "User already exists" });
   } else {
     const toAdd = {
@@ -118,7 +116,7 @@ app.post("/mail", async function (req, res) {
       email: email,
     };
     const newUser = new User(toAdd);
-    newUser
+    await newUser
       .save()
       .then((res) => {
         console.log(res);
