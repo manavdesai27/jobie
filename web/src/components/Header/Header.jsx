@@ -36,7 +36,7 @@ const Header = () => {
           <div className="">
             <a
               className="inline-block border border-white rounded hover:border-gray-200 text-white hover:bg-gray-200 py-1 px-3 hover:text-blue-700"
-              href=""
+              href="/"
               onClick={(e) => openModal(e)}
             >
               Subscribe
