@@ -27,6 +27,7 @@ The JobIE project targets to notify about the latest opportunities and jobs in t
 ![ReactJS](https://img.shields.io/badge/-React-orange?color=09D9FE&style=for-the-badge&logo=React&logoColor=white&logoWidth=20)
 ![NPM](https://img.shields.io/badge/-NPM-brightgreen?color=DC2C34&style=for-the-badge&logo=NPM&logoColor=white&logoWidth=20)
 ![NodeJS](https://img.shields.io/badge/-Node-orange?color=8BBF3F&style=for-the-badge&logo=NODE&logoColor=white&logoWidth=20)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 ![API](https://img.shields.io/badge/-API-orange?color=ff69b4&style=for-the-badge&logo=API&logoColor=white&logoWidth=20)
 ![MongoDB](https://img.shields.io/badge/-MongoDB-orange?color=ncf&style=for-the-badge&logo=MongoDB&logoColor=white&logoWidth=20)
 
