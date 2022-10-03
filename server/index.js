@@ -1,10 +1,11 @@
 const express = require("express");
-const cors = require("cors")
+const cors = require("cors");
 const request = require("request");
 const http = require("http");
 const dotenv = require("dotenv");
-const mongoose = require('mongoose')
-const Tweet = require('./models/schema')
+const mongoose = require("mongoose");
+const Tweet = require("./models/schema");
+const User = require("./models/userSchema");
 
 dotenv.config();
 
@@ -12,12 +13,11 @@ const app = express();
 let port = process.env.PORT || 8000;
 const BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN;
 
-app.use(cors())
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json())
+app.use(express.json());
 
 const server = http.createServer(app);
-
 
 let timeout = 0;
 
@@ -49,26 +49,29 @@ const streamTweets = () => {
             reconnect(stream);
           } else {
             if (json.data) {
-                if (json.includes.users.length === 1) {
-                  const dataFormatted = json.data.text;
-                  const dateCreated = json.data.created_at;
-                  const tweetID = json.data.id;
-                  const tweetedBy = json.includes.users[0].username;
+              if (json.includes.users.length === 1) {
+                const dataFormatted = json.data.text;
+                const dateCreated = json.data.created_at;
+                const tweetID = json.data.id;
+                const tweetedBy = json.includes.users[0].username;
 
-                  const toAdd = {
-                    text: dataFormatted,
-                    creatorUsername: tweetedBy,
-                    tweetId: tweetID,
-                    date: dateCreated,
-                    mail: false,
-                  };
-                  const newTweet = new Tweet(toAdd);
-                  newTweet.save().then((res)=> {
+                const toAdd = {
+                  text: dataFormatted,
+                  creatorUsername: tweetedBy,
+                  tweetId: tweetID,
+                  date: dateCreated,
+                  mail: false,
+                };
+                const newTweet = new Tweet(toAdd);
+                newTweet
+                  .save()
+                  .then((res) => {
                     console.log(res);
-                  }).catch((err)=>{ 
-                    console.log(err)
                   })
-                }
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              }
             } else {
               console.log(json);
             }
@@ -93,21 +96,48 @@ async function reconnect(stream) {
   streamTweets();
 }
 
-app.get('/', async function(req, res){  
+app.get("/", async function (req, res) {
   const arrayOfEntries = await Tweet.find({});
   let response = {
-       body: arrayOfEntries
-  }
+    body: arrayOfEntries,
+  };
   res.send(response);
-})
+});
+
+app.post("/mail", async function (req, res) {
+  const { name, email } = req.body;
+  const userAdded = await User.findOne({ email: email });
+  if (userAdded) {
+    //check existing user
+    res.status(400).send({ message: "User already exists" });
+  } else {
+    const toAdd = {
+      name: name,
+      email: email,
+    };
+    const newUser = new User(toAdd);
+    await newUser
+      .save()
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    res.status(200).send({ message: "User added" });
+  }
+});
 
 server.listen(port, async () => {
   console.log("Listening in port " + port);
-  await mongoose.connect(process.env.ATLAS_URI).then((res) => {
-    console.log("Connected to MongoDB");
-  }).catch((err) => {
-    console.log(err)
-  });
+  await mongoose
+    .connect(process.env.ATLAS_URI)
+    .then((res) => {
+      console.log("Connected to MongoDB");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   try {
     streamTweets();
   } catch (e) {
